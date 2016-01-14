@@ -1,0 +1,20 @@
+1.  http://layer.layui.com/         layer插件网址
+2.  连接linux的用户需和项目文件的所属用户一致
+3.  php/var/run/php-fpm.pid 如果nginx服务启动不了 先删除该文件
+4 . etc/php-fpm.conf    php-fpm配置文件,先复制php_fpm.default文件到etc/目录下改名为php-fpm.conf   pid那一行取消注释,user| group 改成当前用户
+5.  删除 /usr/local/nginx/logs 中的所有文件, 重启nginx服务器.
+6.  nginx 主配置文件, /usr/local/nginx/conf/nginx.conf
+7.  mysql中字符串的连接  concat(字段名,'string')   使用表达式: in concat ...  $condition['xx']=array('exp','concat(name,"_xx")')
+8. JavaScript中的大括号后不能直接写任何东西!!! 就算是注释也要加几个空格
+9.  jquery.form.js  完美实现jquery的ajax数据的异步提交
+10. jquery中属性更改的两个方法  attr 和 prop,如果是状态true|false的话使用prop,attr刷新当前状态
+DNS=180.76.76.76
+
+ping unknown host
+
+虚拟机不能上网的问题:
+1.使用统一的路由器网关:
+GETEWAY = 192.168.0.1
+2. 修改 vi /etc/resolv.conf  网关(统一):
+ nameserver 180.76.76.76
+ nameserver 114.114.114.114
