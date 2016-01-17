@@ -18,7 +18,7 @@ class GoodsCategoryModel extends BaseModel
      *
      * @return mixed
      */
-    public function getTreeList($flag = false)
+    public function getTreeList($fields = '*', $flag = false)
     {
         //返回根据左边界排序并且状态值大于 -1的数据作为分类列表数据.
         $rows = $this->order('lft')->where(array('status' => array('gt', -1)))->select();
@@ -51,13 +51,22 @@ class GoodsCategoryModel extends BaseModel
         return parent::save();
     }
 
+    /**
+     *  改变商品分类状态.当前分类如果有子分类,其子分类一并跟随改变
+     *  使用连接查询的方式,将goods_category表看做两张表.
+     *  使用分类id作为父表中的查询条件,查询出当前分类数据,再作为子表的查询条件,查询出当前分类的所有子分类,改变其状态
+     * @param $id
+     * @param int $status
+     * @return bool
+     */
     public function changeStatus($id, $status = -1)
     {
         //根据自己的id找到自己以及子孙节点的id
         $sql = "select child.id from  goods_category as child,goods_category as parent where  parent.id = {$id}  and child.lft>=parent.lft  and child.rght<=parent.rght";
         $rows = $this->query($sql);
-        $id  = array_column($rows,'id');
-
+        //arrar_column()方法只有PHP5.5之后才有.所以需要做兼容性处理.将改方法在公共function.php文件中判断系统有没有这个方法,没有就定义!
+        $id = array_column($rows, 'id');
+        //将查询的出的id转化为一个一维数组,再作为修改状态的条件.
         $data = array('id' => array('in', $id), 'status' => $status);
         if ($status == -1) {
             $data['name'] = array('exp', "concat(name,'_del')");  //update supplier set name = concat(name,'_del'),status = -1    where id in (1,2,3);

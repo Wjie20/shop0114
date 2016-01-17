@@ -9,4 +9,5 @@ return array(
     'DB_PREFIX'              => '', // 数据库表前缀
     'DB_PARAMS'              => array(), // 数据库连接参数
     'DB_DEBUG'               => true, // 数据库调试模式 开启后可以记录SQL日志
+//    'SHOW_PAGE_TRACE' =>true,
 );

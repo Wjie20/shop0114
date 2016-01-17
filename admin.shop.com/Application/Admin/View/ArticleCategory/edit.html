@@ -1,0 +1,41 @@
+<extend name="Common/edit"/>
+
+<block name="form">
+    <div class="main-div">
+        <form method="post" action="{:U()}">
+            <table cellspacing="1" cellpadding="3" width="100%">
+                                <tr>
+                    <td class="label">分类名称</td>
+                    <td>
+                        <input type='text' name='name' maxlength='60' value='{$name}'/>                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="label">分类简介</td>
+                    <td>
+                        <textarea  name='intro' cols='30' rows='4'>{$intro}</textarea>                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="label">帮助分类</td>
+                    <td>
+                        <input type='radio' class='is_help' name='is_help' value='1'/> 是<input type='radio' class='is_help' name='is_help' value='0'/> 否                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="label">是否显示</td>
+                    <td>
+                        <input type='radio' class='status' name='status' value='1'/> 是<input type='radio' class='status' name='status' value='0'/> 否                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+                                <tr>
+                    <td colspan="2" align="center"><br />
+                        <input type="hidden" name="id" value="{$id}"/>
+                        <input type="submit" class="button ajax-post" value=" 确定 " />
+                        <input type="reset" class="button" value=" 重置 " />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</block>

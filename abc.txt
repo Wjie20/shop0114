@@ -8,8 +8,8 @@
 8. JavaScript中的大括号后不能直接写任何东西!!! 就算是注释也要加几个空格
 9.  jquery.form.js  完美实现jquery的ajax数据的异步提交
 10. jquery中属性更改的两个方法  attr 和 prop,如果是状态true|false的话使用prop,attr刷新当前状态
-DNS=180.76.76.76
-
+11. 百度DNS=180.76.76.76
+12. mysql.ini中的配置: sql-mode = "xxxx,xxx,xxx"  第一个参数表示严格模式!
 ping unknown host
 
 虚拟机不能上网的问题:

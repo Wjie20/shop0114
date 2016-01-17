@@ -1,0 +1,40 @@
+代码生成器的原理：
+
+由表中的信息提供给代码模板。 再成具体代码。
+
+
+创建表的规范：
+1. 每个表必须有表注解。
+create table ....()  comment '表注解'
+
+2. 如果表中的字段是not null. 将其生成一个对应的规则
+    例如:
+    create table supplier(
+    	 id smallint unsigned primary key auto_increment,
+    	 name varchar(100) not null default '' comment '供应商名称',
+    	 sort tinyint unsigned  not null default 20 comment '排序',
+    	 intro text comment '供应商简介',
+    	 status tinyint not null default 1 comment '状态'
+    )engine MyISAM default charset utf8 comment '供应商';
+
+    生成的SupplierModel中:
+    class SupplierModel{
+        protected $_validate = array(
+            array('name','require','供应商名称不能为空'),
+            array('sort','require','排序不能为空'),
+            array('status','require','状态不能为空'),
+        )
+    }
+
+3.  根据表生成表单元素---> 表单元素需要表单的名称,类型, 备选值.
+
+    使用每个字段的注解为生成表单元素提供信息.
+
+    例如:
+    create table supplier(
+         id smallint unsigned primary key auto_increment,
+         name varchar(100) not null default '' comment '供应商名称',
+         sort tinyint unsigned  not null default 20 comment '排序',
+         intro text comment '供应商简介@textarea',
+         status tinyint not null default 1 comment '状态@radio|1=是&0=否'
+    )engine MyISAM default charset utf8 comment '供应商';

@@ -9,6 +9,8 @@ return array(
         '__UPLOADIFY__' => WEB_URL . 'Public/Admin/uploadify',
         '__TREEGRID__' => WEB_URL . 'Public/Admin/treegrid',
         '__ZTREE__' => WEB_URL . 'Public/Admin/ztree',
-        '__BRAND__'=>'http://shop-brand-logo.b0.upaiyun.com/',
+        '__BRAND__' => 'http://shop-brand-logo.b0.upaiyun.com/',
+        '__GOODS__' => 'http://shop-goods.b0.upaiyun.com/',
+        '__UEDITOR__' => WEB_URL . 'Public/Admin/ueditor',
     )
 );

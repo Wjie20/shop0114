@@ -1,0 +1,57 @@
+<extend name="Common/edit"/>
+
+<block name="form">
+    <div class="main-div">
+        <form method="post" action="{:U()}">
+            <table cellspacing="1" cellpadding="3" width="100%">
+                <tr>
+                    <td class="label">文章名称</td>
+                    <td>
+                        <input type='text' name='name' maxlength='60' value='{$name}'/>
+                        <span  class="require-field">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">文章分类</td>
+                    <td>
+                        {:arr2select('article_category_id',$article_categories,$article_category_id)}
+                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <textarea name="content" id="content">{$content}</textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">是否显示</td>
+                    <td>
+                        <input type='radio' class='status' name='status' value='1'/> 是
+                        <input type='radio' class='status' name='status' value='0'/> 否
+                        <span class="require-field">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><br/>
+                        <input type="hidden" name="id" value="{$id}"/>
+                        <input type="submit" class="button" value=" 确定 "/>
+                        <input type="reset" class="button" value=" 重置 "/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</block>
+<block name="js">
+    <script type="text/javascript" charset="utf-8" src="__UEDITOR__/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__UEDITOR__/ueditor.all.min.js"> </script>
+    <script type="text/javascript">
+        $(function () {
+            UE.getEditor('content',{
+                initialFrameHeight :300
+            });
+        })
+    </script>
+</block>

@@ -1,0 +1,41 @@
+1. 重构控制器
+   1.1  控制器中的每个方法都有创建模型对象的代码. 那么将执行方法之前就在构造函数中创建好模型对象.
+
+       private $model;
+
+       //因为该方法在父类构造函数中被调用,该方法的名字必须是: _initialize
+       public function _initialize(){
+           $this->model = D('Supplier');
+       }
+
+
+       在每个方法中使用$this->model方法到模型对象.
+
+    1.2 .  不同模块中的crud中的控制器大多数代码都是一样. 可以将一样的代码向上抽取到BaseController
+
+          以后再写其他模块的控制器时
+          class  XxxxController  extends BaseController{
+                protected $meta_title = 'Yxxx';
+
+          }
+
+
+2. 重构模型
+     2.1 不同的模型中的crud大多数代码都是一样. 可以将一样的代码向上抽取到BaseModel中..
+
+     以后再写其他模块中的模型时:
+        class XxxModel extends BaseModel{
+
+            //写自己的验证规则,因为每个的验证规则都是不一样的.
+            protected $_validate = array();
+
+        }
+
+
+3. 重构视图
+    3.1  列表页面重构Common/list.html
+        在列表中其他的都一样，只有列表内容不一样。。
+    3.2  编辑页面重构Common/edit.html
+        在编辑中其他的都一样，只有列表内容不一样。。
+
+        上面的两个模板中的css和js都要预留出一个块。  专门为子模板覆盖扩展自己的功能

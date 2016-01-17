@@ -1,0 +1,8 @@
+1.编辑/etc/ssh/sshd_config
+vi /etc/ssh/sshd_config
+
+2. 将#UseDNS yes  修改为:
+   UseDNS no
+
+3. 重启sshd服务
+    service sshd restart

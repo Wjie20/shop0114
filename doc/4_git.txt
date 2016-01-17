@@ -1,0 +1,156 @@
+要通过root用户进行安装:
+
+(1) 安装依赖的包
+yum update
+yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker  -y
+
+(2) 下载git源码并解压缩
+wget https://github.com/git/git/archive/master.zip
+unzip git-master.zip
+cd git-master
+
+(3) 编译安装
+make prefix=/usr/local/git all
+make prefix=/usr/local/git install
+
+(4) 将git安装路径添加到PATH变量
+vi /etc/profile
+在最后一行添加 export PATH=/usr/local/git/bin:$PATH 保存退出
+
+(5) 验证是否安装成功
+source /etc/profile
+git --version
+
+
+
+使用www用户和github连接
+现在linux下生成key值,再提交到github上
+
+本地git和远程github链接:
+https://help.github.com/articles/generating-ssh-keys/
+
+1. 切换到www用户下
+
+2. 检测ssh的keys是否存
+    ls -al ~/.ssh
+    结果:
+    id_dsa.pub
+    id_ecdsa.pub
+    id_ed25519.pub
+    id_rsa.pub
+    说明已经存在ssh的keys, 如果没有存在就使用以下的命令进行生成ssh的key
+
+3. 生成ssh的key
+    ssh-keygen -t rsa -b 4096 -C "guoguanzhao@qq.com"
+
+    按三次回车即可
+
+4. 需要将key作为ssh的代理
+    4.1 生成代理代理的pid
+     eval "$(ssh-agent -s)"
+    4.2 将ssh的key作为代理
+     ssh-add ~/.ssh/id_rsa
+
+5. 需要将生成ssh的key保存到github的账号上(将ssh和github联系起来)
+    5.1 注册和登陆github
+    5.2 查看ssh的key值
+         cat ~/.ssh/id_rsa.pub
+    5.3 到ssh的key添加界面
+        https://github.com/settings/ssh
+    5.4 将ssh的key添加到界面中
+
+    5.5 测试ssh和github是否联通
+        ssh -T git@github.com
+
+
+
+
+
+
+
+
+首次将代码放到github上
+配置git
+git config --global user.name "username"
+git config --global user.email "user@mail.com"
+
+
+
+
+
+cd /home/www/shop
+git init       //设置该目录作为一个仓库
+git add * //加入修改列表
+git commit -m '第一次提交' //递交修改声明
+git remote add origin git@github.com:abcd/tmp.git //为远程Git更名为origin
+git push -u origin master //推送此次修改
+
+
+新做一个功能的时候需要新建一个分支, 实现新功能的代码都在改分支上
+1. 新创建一个分支
+    git branch  新的分支名字
+2. 切换到新的分支上
+    git checkout  新的分支名字
+
+3. 上面的两步可以使用一步完成
+    git checkout  -b 新的分支名字   (当分支不存在的时候就会创建)
+
+4. 查看有哪些分支
+    git branch;
+
+
+5. 将当前分支推到完成
+git push -u  origin  指定的分支
+
+6. 切换到主分支并且将其他分支合并到主分支上. 并且将合并过来的代码推到主分支上
+git checkout master
+git merge  其他分支
+git push -u  origin master
+
+
+7. 刚到公司,需要将公司现有的代码拷贝下来
+git clone  git的地址     文件夹中
+
+
+
+
+
+
+
+假如本地已经存在了这个项目，而仓库中又有一新的更新，如何把更的合并到本地的项目中？
+$ git fetch origin    //取得远程更新，这里可以看做是准备要取了
+$ git merge origin/master  //把更新的内容合并到本地分支/master
+
+
+
+假设本地的代码没有github远程的代码新. 需要先从远程拉下最新的代码
+git pull
+拉下来的时候需要加上注释,说明远程的代码和本地的代码进行合并.
+
+合并之后再将本地的代码推送到远程
+git push -u  origin goods
+
+
+
+
+
+附上一些git的常见命令：
+
+•    git remote add origin git@github.com:myaccount/myproject.git
+•    git push -u origin master
+•    gitinit--------建立repository
+•    git 命令 --help-----------查看帮助命令
+•    touch filename
+•    git status------查看状态
+•    git add filename--------加入文件到临时的东东
+•    git commit -m "add the file filename" -----commit到repository中
+•    git log------查看日志
+•    echo "ddd" > filename ------修改filename（先清空）
+•    git add filename
+•    git commit -m "filename changed"
+•    git diff 版本一 版本二--------比较不同
+•    git reset 版本号--------返回到版本号
+•    git revert 版本号--------撤销到版本号
+•    git checkout filename------撤销当下没有git add的动作
+•    git branch-------参看分支信息
+•    git branch develop----

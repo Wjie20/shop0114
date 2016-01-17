@@ -27,12 +27,13 @@ class BaseModel extends Model
     public function getPageResult($wheres = array())
     {  //有默认的条件, 在调用该方法是不需要传入.
         //因为总条数和分页列表都需要查询出状态>-1的数据
-        $wheres['status'] = array('gt', -1);
+        $wheres['obj.status'] = array('gt', -1);
 
 
         //>>1.准备分页工具条html
         $pageHtml = '';
-        $pageSize = 2;  //每页多少条
+        $pageSize = 5;  //每页多少条
+        $this->alias('obj');
         $totalRows = $this->where($wheres)->count();  //总条数
         $page = new Page($totalRows, $pageSize);
         $pageHtml = $page->show();//生成分页的html
@@ -42,6 +43,8 @@ class BaseModel extends Model
         if ($page->firstRow > $totalRows) {  //起始条数大于总条数, 显示最后一页数据.
             $page->firstRow = $totalRows - $page->listRows;  //起始条数= 总条数-每页多少条
         }
+        $this->alias('obj');
+        $this->_setModel();
         $row = $this->where($wheres)->limit($page->firstRow, $page->listRows)->select();
         return array('rows' => $row, 'pageHtml' => $pageHtml);
     }
@@ -49,9 +52,10 @@ class BaseModel extends Model
     /**
      * 查询出状态大于-1
      */
-    public function getList()
+    public function getList($field = '*', $wheres = array())
     {
-        return $this->where(array('status' => array('gt', -1)))->select();
+        $wheres['status'] = array('gt', -1);
+        return $this->field($field)->where($wheres)->select();
     }
 
     /**
@@ -61,17 +65,18 @@ class BaseModel extends Model
      */
     public function changeStatus($id, $status = -1)
     {
-        /**
-         * if($id是数组){
-         * 'id'=>array('in',array(1,2,3))
-         * }else{
-         * 'id'=>array('in',"1")
-         * }
-         */
         $data = array('id' => array('in', $id), 'status' => $status);
         if ($status == -1) {
             $data['name'] = array('exp', "concat(name,'_del')");  //update supplier set name = concat(name,'_del'),status = -1    where id in (1,2,3);
         }
         return parent::save($data);
+    }
+
+    /**
+     * 钩子方法,主要用于钩子类覆盖
+     */
+    protected function _setModel()
+    {
+
     }
 }

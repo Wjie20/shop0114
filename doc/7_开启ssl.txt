@@ -1,0 +1,47 @@
+写在前面
+yum -y install openssl-devel  autoconf
+
+
+安装OpenSSL的软件
+1. 下载
+http://www.openssl.org/source/openssl-1.0.1p.tar.gz
+
+解压
+
+2. 解压和配置
+tar -zxvf  openssl-1.0.1p.tar.gz
+cd openssl-1.0.1p
+./config
+
+3. 安装
+ make && make install
+
+
+
+======================上面安装openssl的软件=================
+======================下面是安装php的openssl的扩展,只是扩展中要使用到openssl的软件=================
+安装php的openssl扩展:
+1. 进入php的源代码文件夹openssl扩展目录
+cd /usr/local/src/php-5.4.42/ext/openssl/
+
+2.在该文件夹下执行,生成配置信息
+/usr/local/php/bin/phpize
+
+如果提示:  Cannot find config.m4.  请执行以下代码:
+mv config0.m4  config.m4
+
+6. 配置
+./configure --with-openssl --with-php-config=/usr/local/php/bin/php-config
+
+7. 编译和安装
+make && make install
+
+8. 需要在php.ini中配置,让php启动时加载扩展
+    8.1 需要指定扩展的目录在哪个位置
+    extension_dir = "/usr/local/php/lib/php/extensions/no-debug-zts-20100525/"
+    8.2 需要开启扩展
+    extension=openssl.so
+
+
+9.重启php-fpm服务器, 因为php-fpm使用到php.ini的配置文件
+   service php-fpm restart

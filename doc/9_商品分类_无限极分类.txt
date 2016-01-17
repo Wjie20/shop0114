@@ -1,0 +1,9 @@
+第一种表设计:
+id  name  parent_id
+
+第二种表设计:
+id  name  parent_id  level  path
+
+第三种表设计:(嵌套集合)
+                       (层级)   (左边界)  (右边界)
+id  name  parent_id    level    lft       rgt

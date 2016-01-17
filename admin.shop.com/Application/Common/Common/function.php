@@ -30,6 +30,23 @@ if (!function_exists('array_column')) {
         foreach ($params as $row) {
             $result [] = $row[$field];
         }
-       return $result;
+        return $result;
     }
+}
+
+
+function arr2select($name, $rows, $select_option = '', $fieldValue = 'id', $fieldText = 'name')
+{
+    $select_html = "<select name='{$name}'>";
+    $select_html .= "<option value=''> - 请选择 - </option>";
+    foreach ($rows as $row) {
+        //如果传递的第三个参数等于当前行中的当前字段的值,选中当前option
+        $selected = '';
+        if ($row[$fieldValue] == $select_option) {
+            $selected = 'selected';
+        }
+        $select_html .= "<option value='{$row[$fieldValue]}' {$selected} >{$row[$fieldText]}</option>";
+    }
+    $select_html .= '</select>';
+    echo $select_html;
 }
