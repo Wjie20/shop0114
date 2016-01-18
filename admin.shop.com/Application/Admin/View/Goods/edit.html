@@ -95,8 +95,8 @@
                 <tr>
                     <td class="label">库存</td>
                     <td>
-                        <input type='text' name='stock' maxlength='60' value='{$stock}'/> <span
-                            class="require-field">*</span>
+                        <input type='text' name='stock' maxlength='60' value='{$stock}'/>
+                        <span class="require-field">*</span>
                     </td>
                 </tr>
                 <tr>
@@ -106,7 +106,7 @@
                         <input type='hidden' class="logo" name='logo' maxlength='60' value="{$logo}"/>
 
                         <div class="upload-img-box" style="display: none">
-                            <div class="upload-pre-item">
+                            <div class="upload-pre-item" id="upload-pre-item">
                                 <img src="__GOODS__{$logo}">
                             </div>
                         </div>
@@ -158,7 +158,7 @@
             <table cellspacing="1" cellpadding="3" width="100%" style="display: none">
                 <tr>
                     <td>
-                        <div class="upload-img-box" style="">
+                        <div id="upload-img-box" class="upload-img-box" style="">
                             <!--上传商品相册后图片的显示位置-->
                             <volist name="goods_galleries" id="goods_gallery">
                                 <div class="upload-pre-item">
@@ -176,8 +176,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type='file' id="goods_gallery" class="goods_gallery" name='goods_gallery' maxlength='60'
-                               value=""/>
+                        <input type='file' id="goods_gallery" class="goods_gallery" name='goods_gallery' maxlength='60' value=""/>
                     </td>
                 </tr>
 
@@ -201,7 +200,16 @@
                         <input   class="right2left"   type="button" value="<"><br/><br/>
                         <input class="right_all_left"  type="button" value="<<"><br/>
                     </td>
-                    <td><select  class="right" size="10" multiple="multiple" style="width: 500px"></select></td>
+                    <td>
+                        <div class="article_id">
+
+                        </div>
+                            <select  class="right" size="10" multiple="multiple" style="width: 500px">
+                            <volist name="articles" id="article">
+                                 <option value="{$article.article_id}">{$article.article_name}</option>
+                            </volist>
+                        </select>
+                    </td>
                 </tr>
             </table>
             <div style="text-align: center">
@@ -308,7 +316,7 @@
                 'uploader': "{:U('Upload/index')}",     //处理上传插件 上传上来的 文件
                 'onUploadSuccess': function (file, data, response) {  //data就是响应的 上传后的地址
                     $('.upload-img-box').show(); //显示出div
-                    $('.upload-img-box .upload-pre-item img').attr('src', '__GOODS__' + data);
+                    $('.upload-img-box #upload-pre-item img').attr('src', '__GOODS__' + data);
                     console.debug(data);
                     $('.logo').val(data);  //将上传后的路径同时也放到隐藏域中.. 一起提交给服务器.
                 },
@@ -358,7 +366,7 @@
                            <a href="javascript:void(0);">[ X ]</a>\
                            <input type="hidden" name="path[]" value="' + data + '"/>\
                             </div>';
-                    $('.upload-img-box').append(goods_gallery_html);
+                    $('#upload-img-box').append(goods_gallery_html);
                 },
                 'onUploadError': function (file, errorCode, errorMsg, errorString) {
                     alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
@@ -371,7 +379,7 @@
             // 1.如果是从数据库中回想的商品相册图片,先删除数据库中当前回想相册id对应的图片信息,再删除对应显示图片的div节点
             // 2.如果是新上传的图片,直接删除显示图片的div节点
             // 3. 为了区分是从数据库查询出回想的图片还是新上传显示在页面的图片.给从数据库查询回显循环显示图片的节点的a加上galleryId的自定义属性,判断如果有该属性,表示是数据库中的数据
-            $('.upload-pre-item a').click(function () {
+            $('#upload-img-box').on('click','a', function () {
                 var galleryId = $(this).attr('galleryId');
 
                 //如果是数据库中回显的图片
@@ -398,8 +406,9 @@
                        }
                    })
                }else{
+                   console.debug($(this));
                    $(this).closest('div').remove();
-                   location.reload();
+//                   location.reload();
                }
             });
             /////////////////////////////商品相册  结束////////////////////////////////
@@ -422,18 +431,23 @@
             //从左至右移动所有
             $('.left_all_right').click(function () {
                 $('.left option').appendTo('.right');
+                option2hidden();
+
             });
             //从右至左移动所有
             $('.right_all_left').click(function () {
                 $('.right option').appendTo('.left');
+                option2hidden();
             });
             //从左至右移动选中的option
             $('.left2right').click(function () {
                 $('.left option:selected').appendTo('.right');
+                option2hidden();
             });
             //从右至左移动选中的option
             $('.right2left').click(function () {
                 $('.right option:selected').appendTo('.left');
+                option2hidden();
             });
             //双击一个option,让其移动到另一边
             $('.left').on('dblclick','option', function () {
@@ -444,7 +458,13 @@
             });
             /////////////////////////////点击移动文章  结束////////////////////////////////
 
-
+            function option2hidden(){
+                $('.article_id').empty();
+                //遍历右边下拉框中的option,将所有option中的值生成一个保存article_id值的隐藏域,用户将当前商品对应的文章id传给服务器,保存到数据库中.
+                $('.right>option').each(function () {
+                    $("<input  type='hidden' name='article_id[]' value='"+this.value+"'/>").appendTo('.article_id');
+                });
+            }
 
         });
     </script>

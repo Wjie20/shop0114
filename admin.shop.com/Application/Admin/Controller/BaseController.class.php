@@ -25,14 +25,16 @@ class BaseController extends Controller
 
     public function index()
     {
-
         //得到查询的关键字
         $keyword = I('get.keyword', '');
         $wheres = array();  //专门用来存放查询的条件
         if (!empty($keyword)) {
-            $wheres['name'] = array("like", "{$keyword}%");
+            $wheres['obj.name'] = array("like", "{$keyword}%");
         }
+        $this->_setWheres($wheres);
+//        dump($wheres);
         $pageResult = $this->model->getPageResult($wheres);
+//        dump($pageResult);exit;
         //>>3.将数据分配到页面上
         $this->assign($pageResult);
 
@@ -40,10 +42,19 @@ class BaseController extends Controller
         cookie('__forward__', $_SERVER['REQUEST_URI']);
         $this->assign('meta_title', $this->meta_title);
         //>>4.选择视图页面
+        $this->_before_index_view();
         $this->_before_edit_view();
         $this->display('index');
     }
 
+    /**
+     * 用于被子类覆盖的钩子方法,子类覆盖它提供查询数据的条件,使用引用传值,改变$wheres条件中的值
+     * @param $wheres
+     */
+    protected function _setWheres(&$wheres)
+    {
+
+    }
 
     /**
      * 根据id将其状态修改为status的值
@@ -113,7 +124,10 @@ class BaseController extends Controller
 
     protected function _before_edit_view()
     {
-
     }
 
+    protected function _before_index_view()
+    {
+
+    }
 }

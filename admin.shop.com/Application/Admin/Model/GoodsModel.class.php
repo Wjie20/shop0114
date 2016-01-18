@@ -3,6 +3,7 @@ namespace Admin\Model;
 
 
 use Think\Model;
+use Think\Page;
 
 class GoodsModel extends BaseModel
 {
@@ -21,6 +22,10 @@ class GoodsModel extends BaseModel
 
 
     );
+
+
+
+
 
     /**
      * 根据表单复选框提交的数据(数组),使用二进制相或计算商品的状态值.
@@ -63,6 +68,21 @@ class GoodsModel extends BaseModel
         $data = array();
         foreach ($paths as $path) {
             $data[] = array('goods_id' => $id, 'path' => $path);
+        }
+        return $data;
+    }
+
+    /**
+     * 根据当前商品id 和传递的当前商品对应的文章的id数组,计算成要想goods_article表中添加的数据,并返回
+     * @param $article_id
+     * @param $goods_id
+     * @return array
+     */
+    private function handleGoodsArticle($article_id, $goods_id)
+    {
+        $data = array();
+        foreach ($article_id as $aId) {
+            $data[] = array('goods_id' => $goods_id, 'article_id' => $aId);
         }
         return $data;
     }
@@ -128,9 +148,20 @@ class GoodsModel extends BaseModel
         $goodsGalleryModel = M('GoodsGallery');
         $result = $goodsGalleryModel->addAll($goods_gallery_data);
         if ($result === false) {
-            $this->error = ' 保存商品相册时出错!';
-            $this->rollback();
-            return false;
+//            $this->error = ' 保存商品相册时出错!';
+//            $this->rollback();
+//            return false;
+        }
+        //调用处理当前商品对应的文章的方法,获取数据添加到goods_article表中
+        $data = $this->handleGoodsArticle($requestData['article_id'], $id);
+        if (!empty($data)) {
+            $goodsArticleModel = M('GoodsArticle');
+            $result = $goodsArticleModel->addAll($data);
+            if ($result === false) {
+                $this->error = ' 保存商品文章时出错!';
+                $this->rollback();
+                return false;
+            }
         }
         $this->commit();
         return $id;
@@ -150,6 +181,8 @@ class GoodsModel extends BaseModel
         $id = $this->data['id'];
         $this->handleGoodsStatus();
         $result = parent::save();
+//        echo $this->_sql();exit;
+//        dump($result);exit;
         if ($result === false) {
             $this->error = '更新商品出错啦';
             $this->rollback();
@@ -183,7 +216,7 @@ class GoodsModel extends BaseModel
         //将编辑后的图片路径再保存到goodsGallery表中
         $goodsGalleryModel = M('GoodsGallery');
         $data = $this->handleGoodsGallery($updateData['path'], $id);
-        if($data){
+        if ($data) {
             $result = $goodsGalleryModel->addAll($data);
             if ($result === false) {
                 $this->error = '修改商品图片时出错';
@@ -191,9 +224,29 @@ class GoodsModel extends BaseModel
                 return false;
             }
         }
+
+        //将编辑后的商品的对应文章信息更新到goods_article表中,
+        //先根据当前商品id,删除goods_article表中对应的文章,
+        //再将新的文章数据更新到该表中.
+        $goodsArticleModel = D('GoodsArticle');
+        $result = $goodsArticleModel->where(array('goods_id' => $id))->delete();
+        if ($result === false) {
+            $this->error = '修改商品相关文章时出错';
+            $this->rollback();
+            return false;
+        }
+        //调用处理当前商品对应的文章的方法,获取数据添加到goods_article表中
+        $data = $this->handleGoodsArticle($updateData['article_id'], $id);
+        if (!empty($data)) {
+            $result = $goodsArticleModel->addAll($data);
+            if ($result === false) {
+                $this->error = ' 保存商品文章时出错!';
+                $this->rollback();
+                return false;
+            }
+        }
         $this->commit();
         return $result;
-
     }
 
     /**

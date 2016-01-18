@@ -45,8 +45,9 @@ class BaseModel extends Model
         }
         $this->alias('obj');
         $this->_setModel();
-        $row = $this->where($wheres)->limit($page->firstRow, $page->listRows)->select();
-        return array('rows' => $row, 'pageHtml' => $pageHtml);
+        $rows = $this->where($wheres)->limit($page->firstRow, $page->listRows)->select();
+        $this->_handleRows($rows);
+        return array('rows' => $rows, 'pageHtml' => $pageHtml);
     }
 
     /**
@@ -78,5 +79,14 @@ class BaseModel extends Model
     protected function _setModel()
     {
 
+    }
+
+    protected function _handleRows(&$rows){
+        foreach($rows as &$row){
+            $row['is_best'] =( $row['goods_status'] & 1);
+            $row['is_new'] =(( $row['goods_status'] & 2 ) >> 1);
+            $row['is_hot'] =(( $row['goods_status'] & 4) >> 2);
+        }
+        unset($row);
     }
 }

@@ -73,4 +73,13 @@ class GoodsCategoryModel extends BaseModel
         }
         return parent::save($data);
     }
+
+    public function getLeaf($goods_category_id)
+    {
+        $sql = "select child.id from goods_category as  parent,goods_category as child where  parent.id = {$goods_category_id} and child.lft>=parent.lft and child.rght<=parent.rght and child.lft+1 =child.rght";
+        $rows = $this->query($sql);
+        //从二维数组中得到id的值
+        $ids = array_column($rows,'id');
+        return $ids;
+    }
 }
