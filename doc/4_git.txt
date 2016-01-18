@@ -24,7 +24,7 @@ git --version
 
 
 使用www用户和github连接
-现在linux下生成key值,再提交到github上
+
 
 本地git和远程github链接:
 https://help.github.com/articles/generating-ssh-keys/
