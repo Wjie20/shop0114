@@ -24,7 +24,7 @@ class GoodsCategoryController extends BaseController
 
     protected function _before_edit_view(){
         //获取有排列顺序的分类列表数据
-        $jsonData = $this->model->getTreeList(true);
+        $jsonData = $this->model->getTreeList('id,name,parent_id',true);
         //将其转化成json格式的数据分配给浏览器
         $this->assign('jsonData', $jsonData);
     }

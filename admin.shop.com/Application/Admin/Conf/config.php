@@ -11,6 +11,7 @@ return array(
         '__ZTREE__' => WEB_URL . 'Public/Admin/ztree',
         '__BRAND__' => 'http://shop-brand-logo.b0.upaiyun.com/',
         '__GOODS__' => 'http://shop-goods.b0.upaiyun.com/',
+        '__UPLOAD__' => 'http://admin.shop.com/',
         '__UEDITOR__' => WEB_URL . 'Public/Admin/ueditor',
     )
 );

@@ -41,19 +41,19 @@
     </div>
     <div class="main-div">
         <form method="post" action="{:U()}">
-            <table cellspacing="1" cellpadding="3" width="100%" style="display: none">
+            <table cellspacing="1" cellpadding="3" width="100%" style="display: block">
                 <tr>
                     <td class="label">商品名称</td>
                     <td>
-                        <input type='text' name='name' maxlength='60' value='{$name}'/> <span
-                            class="require-field">*</span>
+                        <input type='text' name='name' maxlength='60' value='{$name}'/>
+                        <span class="require-field">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">简称</td>
                     <td>
-                        <input type='text' name='short_name' maxlength='60' value='{$short_name}'/> <span
-                            class="require-field">*</span>
+                        <input type='text' name='short_name' maxlength='60' value='{$short_name}'/>
+                        <span class="require-field">*</span>
                     </td>
                 </tr>
                 <tr>
@@ -107,7 +107,7 @@
 
                         <div class="upload-img-box" style="display: none">
                             <div class="upload-pre-item" id="upload-pre-item">
-                                <img src="__GOODS__{$logo}">
+                                <img width="150" src="/Uploads/{$logo}">
                             </div>
                         </div>
                     </td>
@@ -118,6 +118,8 @@
                         <input type='checkbox' class='goods_status' name='goods_status[]' value='1'/> 精品
                         <input type='checkbox' class='goods_status' name='goods_status[]' value='2'/> 新品
                         <input type='checkbox' class='goods_status' name='goods_status[]' value='4'/> 热销
+                        <input type='checkbox' class='goods_status' name='goods_status[]' value='8'/> 疯狂抢购
+                        <input type='checkbox' class='goods_status' name='goods_status[]' value='16'/> 猜你喜欢
                     </td>
                 </tr>
                 <tr>
@@ -162,7 +164,7 @@
                             <!--上传商品相册后图片的显示位置-->
                             <volist name="goods_galleries" id="goods_gallery">
                                 <div class="upload-pre-item">
-                                    <img src="__GOODS__{$goods_gallery.path}">
+                                    <img src="/Uploads/{$goods_gallery.path}">
                                     <a href="javascript:;" galleryId="{$goods_gallery.id}">[ X ]</a>
                                 </div>
                             </volist>
@@ -181,7 +183,7 @@
                 </tr>
 
             </table>
-            <table cellspacing="1" cellpadding="3" width="100%" style="display: block">
+            <table cellspacing="1" cellpadding="3" width="100%" style="display: none">
                 <tr>
                     <td colspan="3">
                         <b>文章标题: </b>
@@ -316,7 +318,7 @@
                 'uploader': "{:U('Upload/index')}",     //处理上传插件 上传上来的 文件
                 'onUploadSuccess': function (file, data, response) {  //data就是响应的 上传后的地址
                     $('.upload-img-box').show(); //显示出div
-                    $('.upload-img-box #upload-pre-item img').attr('src', '__GOODS__' + data);
+                    $('.upload-img-box #upload-pre-item img').attr('src', '/Uploads/' + data);
                     console.debug(data);
                     $('.logo').val(data);  //将上传后的路径同时也放到隐藏域中.. 一起提交给服务器.
                 },
@@ -362,7 +364,7 @@
                 'uploader': "{:U('Upload/index')}",     //处理上传插件 上传上来的 文件
                 'onUploadSuccess': function (file, data, response) {   //data就是上传成功后的图片地址
                     var goods_gallery_html = ' <div class="upload-pre-item">\
-                           <img src="__GOODS__' + data + '">\
+                           <img src="/Uploads/' + data + '">\
                            <a href="javascript:void(0);">[ X ]</a>\
                            <input type="hidden" name="path[]" value="' + data + '"/>\
                             </div>';

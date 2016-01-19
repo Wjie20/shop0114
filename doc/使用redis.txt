@@ -52,6 +52,7 @@
     chkconfig redis on
     #打开服务
     service redis start
+    如果 /usr/local/redis/etc/redis.conf该目录中没有redis.conf文件 ,到/usr/local/src/redis-3.0.2/下复制一份到该目录
     #关闭服务
     service redis stop
 
