@@ -11,7 +11,7 @@
         <div class="breadcrumb">
             <h2>当前位置：
                 <volist name="parents" id="parent">
-                <a href=""> {$parent.name}</a> >
+                    <a href=""> {$parent.name}</a> >
                 </volist>
                 {$name}
             </h2>
@@ -125,14 +125,15 @@
 
                 <div class="leftbar_wrap">
                     <volist name="histories" id="history">
-                    <dl >
-                        <dt><a href="{:U('Index/goods',array('id'=>$history['id']))}"><img src="/Uploads/{$history.logo}" alt=""/></a></dt>
-                        <dd><a href="{:U('Index/goods',array('id'=>$history['id']))}">{$history.name}</a></dd>
-                    </dl>
+                        <dl>
+                            <dt><a href="{:U('Index/goods',array('id'=>$history['id']))}"><img
+                                    src="/Uploads/{$history.logo}" alt=""/></a></dt>
+                            <dd><a href="{:U('Index/goods',array('id'=>$history['id']))}">{$history.name}</a></dd>
+                        </dl>
                     </volist>
                     <!--<dl >-->
-                        <!--<dt><a href=""><img src="__IMG__/crazy4.jpg" alt=""/></a></dt>-->
-                        <!--<dd><a href="">直降200元！TCL正1.5匹空调</a></dd>-->
+                    <!--<dt><a href=""><img src="__IMG__/crazy4.jpg" alt=""/></a></dt>-->
+                    <!--<dd><a href="">直降200元！TCL正1.5匹空调</a></dd>-->
                     <!--</dl>-->
                 </div>
             </div>
@@ -165,11 +166,16 @@
                         <div class="smallpic_wrap">
                             <ul>
                                 <volist name="goodsGalleries" id="goodsGallery">
-                                <li  <eq name="i" value="1">class="cur"</eq>>
-                                    <a  <eq name="i" value="1">class="zoomThumbActive"</eq> href="javascript:void(0);"
-                                       rel="{gallery: 'gal1', smallimage: '/Uploads/{$goodsGallery}',largeimage: '/Uploads/{$goodsGallery}'}"><img
-                                            src="/Uploads/{$goodsGallery}"></a>
-                                </li>
+                                    <li
+                                    <eq name="i" value="1">class="cur"</eq>
+                                    >
+                                    <a
+                                    <eq name="i" value="1">class="zoomThumbActive"</eq>
+                                    href="javascript:void(0);"
+                                    rel="{gallery: 'gal1', smallimage: '/Uploads/{$goodsGallery}',largeimage:
+                                    '/Uploads/{$goodsGallery}'}"><img
+                                        src="/Uploads/{$goodsGallery}"></a>
+                                    </li>
                                 </volist>
                             </ul>
                         </div>
@@ -189,42 +195,42 @@
                         <li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li>
                         <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
                     </ul>
-                    <form action="" method="post" class="choose">
+                    <form action="{:U('ShoppingCar/add')}" method="post" class="choose">
                         <ul>
-                            <li class="product">
-                                <dl>
-                                    <dt>颜色：</dt>
-                                    <dd>
-                                        <a class="selected" href="javascript:;">黑色 <input type="radio" name="color"
-                                                                                          value="黑色" checked="checked"/></a>
-                                        <a href="javascript:;">白色 <input type="radio" name="color" value="白色"/></a>
-                                        <a href="javascript:;">蓝色 <input type="radio" name="color" value="蓝色"/></a>
-                                        <input type="hidden" name="" value=""/>
-                                    </dd>
-                                </dl>
-                            </li>
+                            <!--<li class="product">-->
+                                <!--<dl>-->
+                                    <!--<dt>颜色：</dt>-->
+                                    <!--<dd>-->
+                                        <!--<a class="selected" href="javascript:;">黑色 <input type="radio" name="color"-->
+                                                                                          <!--value="黑色" checked="checked"/></a>-->
+                                        <!--<a href="javascript:;">白色 <input type="radio" name="color" value="白色"/></a>-->
+                                        <!--<a href="javascript:;">蓝色 <input type="radio" name="color" value="蓝色"/></a>-->
+                                        <!--<input type="hidden" name="" value=""/>-->
+                                    <!--</dd>-->
+                                <!--</dl>-->
+                            <!--</li>-->
 
-                            <li class="product">
-                                <dl>
-                                    <dt>版本：</dt>
-                                    <dd>
-                                        <a href="javascript:;">i3 4G内存版 <input type="radio" name="ver" value=""/></a>
-                                        <a href="javascript:;">i5 4G内存版 <input type="radio" name="ver" value=""/></a>
-                                        <a class="selected" href="javascript:;">i5 8G内存版<input type="radio" name="ver"
-                                                                                               value=""
-                                                                                               checked="checked"/></a>
-                                        <a href="javascript:;">SSD超极本 <input type="radio" name="ver" value=""/></a>
-                                        <input type="hidden" name="" value=""/>
-                                    </dd>
-                                </dl>
-                            </li>
+                            <!--<li class="product">-->
+                                <!--<dl>-->
+                                    <!--<dt>版本：</dt>-->
+                                    <!--<dd>-->
+                                        <!--<a href="javascript:;">i3 4G内存版 <input type="radio" name="ver" value=""/></a>-->
+                                        <!--<a href="javascript:;">i5 4G内存版 <input type="radio" name="ver" value=""/></a>-->
+                                        <!--<a class="selected" href="javascript:;">i5 8G内存版<input type="radio" name="ver"-->
+                                                                                               <!--value=""-->
+                                                                                               <!--checked="checked"/></a>-->
+                                        <!--<a href="javascript:;">SSD超极本 <input type="radio" name="ver" value=""/></a>-->
+                                        <!--<input type="hidden" name="" value=""/>-->
+                                    <!--</dd>-->
+                                <!--</dl>-->
+                            <!--</li>-->
 
                             <li>
                                 <dl>
                                     <dt>购买数量：</dt>
                                     <dd>
                                         <a href="javascript:;" id="reduce_num"></a>
-                                        <input type="text" name="amount" value="1" class="amount"/>
+                                        <input type="text" name="num" value="1" class="amount"/>
                                         <a href="javascript:;" id="add_num"></a>
                                     </dd>
                                 </dl>
@@ -234,6 +240,7 @@
                                 <dl>
                                     <dt>&nbsp;</dt>
                                     <dd>
+                                        <input type="hidden" name="id" value="{$id}"/>
                                         <input type="submit" value="" class="add_btn"/>
                                     </dd>
                                 </dl>

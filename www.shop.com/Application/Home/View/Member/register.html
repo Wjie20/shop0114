@@ -1,0 +1,214 @@
+<extend name="common"/>
+
+<block name="title">用户注册</block>
+<block name="css">
+    <style type="text/css">
+        .error {
+            color: indianred;
+        }
+
+        .p_error {
+            color: orangered;
+        }
+    </style>
+</block>
+<block name="center">
+    <div class="login w990 bc mt10 regist">
+        <div class="login_hd">
+            <h2>用户注册</h2>
+            <b></b>
+        </div>
+        <div class="login_bd">
+            <div class="login_form fl">
+                <form action="{:U()}" method="post" id="registerForm">
+                    <ul>
+                        <li>
+                            <label for="">用户名：</label>
+                            <input type="text" class="txt" name="username"/> <span class="errorMsg"></span>
+
+                            <p>3-20位字符，可由中文、字母、数字和下划线组成</p>
+                        </li>
+                        <li>
+                            <label for="">密码：</label>
+                            <input type="password" class="txt" id="password" name="password"/> <span
+                                class="errorMsg"></span>
+
+                            <p>6-20位字符，可使用字母、数字和符号的组合，不建议使用纯数字、纯字母、纯符号</p>
+                        </li>
+                        <li>
+                            <label for="">确认密码：</label>
+                            <input type="password" class="txt" name="repassword"/> <span class="errorMsg"></span>
+
+                            <p>请再次输入密码</p>
+                        </li>
+                        <li>
+                            <label for="">Email：</label>
+                            <input type="text" class="txt" name="email"/> <span class="errorMsg"></span>
+
+                            <p>请输入你的邮箱账号</p>
+                        </li>
+                        <li>
+                            <label for="">手机号：</label>
+                            <input type="text" class="txt tel" name="tel"/> <span class="errorMsg"></span>
+
+                            <p>请手机号码</p>
+                        </li>
+                        <li class="checkcode">
+                            <label for="">验证码：</label>
+                            <input type="text" name="smsCode"/> <span class="errorMsg"></span>
+                            <button type="button" class="getSmsCode">获取手机验证码</button>
+                        </li>
+                        <li>
+                            <label for="">&nbsp;</label>
+                            <input type="checkbox" class="chb" checked="checked"/> 我已阅读并同意《用户注册协议》
+                        </li>
+                        <li>
+                            <label for="">&nbsp;</label>
+                            <input type="submit" value="" class="login_btn"/>
+                        </li>
+                    </ul>
+                </form>
+
+
+            </div>
+
+            <div class="mobile fl">
+                <h3>手机快速注册</h3>
+
+                <p>中国大陆手机用户，编辑短信 “<strong>XX</strong>”发送到：</p>
+
+                <p><strong>1069099988</strong></p>
+            </div>
+
+        </div>
+    </div>
+</block>
+<block name="js">
+    <script type="text/javascript" src="__JS__/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //自定义的验证方法,验证用户名是否是用有中文数字下划线和英文字母组成
+            $.validator.addMethod('checkUserName', function (value, element, param) {
+                if (param) {
+                    return /^[a-zA-Z0-9\u4e00-\u9fa5-_]+$/.test(value);
+                }
+            }, '用户名由中文、字母、数字和下划线组成');
+
+            // 手机号码验证
+            $.validator.addMethod("isMobile", function (value, element) {
+                var length = value.length;
+                return this.optional(element) || (length == 11 && /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value));
+            }, "请正确填写您的手机号码。");
+            //给当前表单添加validate验证
+            $("#registerForm").validate({
+                //验证规则
+                rules: {
+                    username: {
+                        required: true,
+                        rangelength: [3, 20],
+                        checkUserName: true,
+                        remote: '{:U("Member/checkIsExists")}'    //验证当前输入的用户名是否在数据库中已存在
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    },
+                    repassword: {
+                        required: true,
+                        rangelength: [6, 20],
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: '{:U("Member/checkIsExists")}'
+                    },
+                    tel: {
+                        required: true,
+                        isMobile: true,
+                        remote: '{:U("Member/checkIsExists")}'
+                    },
+                    smsCode: {
+                        required: true,
+                        //根据tel验证用户输入的验证码是否正确
+                        remote: {
+                            url: '{:U("Member/checkTelCode")}',
+                            type: "post",
+                            data: {
+                                tel: function () {
+                                    return $('.tel').val();
+                                }
+                            }
+                        }
+                    }
+                },
+                //验证不合法的提示信息
+                messages: {
+                    username: {
+                        required: " 用户名不能为空",
+                        rangelength: " 用户名必须在3-20位之间!",
+                        remote :' 用户名已存在'
+                    },
+                    password: {
+                        required: " 密码不能为空",
+                        rangelength: " 密码必须在6-20位之间!"
+                    },
+                    repassword: {
+                        required: " 请重新输入密码",
+                        rangelength: " 密码必须在6-20位之间!",
+                        equalTo: '密码不一致!'
+                    },
+                    email: {
+                        required: " 邮箱不能为空",
+                        email: '邮箱格式不正确!',
+                        remote :' 该Email已被注册'
+                    },
+                    tel: {
+                        required: " 请输入你的电话号码",
+                        remote :' 该手机号已被注册'
+
+                    },
+                    smsCode:{
+                        required: " 请输入手机验证码",
+                        remote:'输入不正确或该验证码一过期,请确认!'
+                    }
+                },
+                //验证失败,在当前表单元素后面显示错误提示信息
+                errorPlacement: function (labelError, element) {
+                    var errorInfo = labelError.html();
+                    element.next('span').html(errorInfo).addClass('error');
+                    $('span').next('p').addClass('p_error');
+//                    element.next().next().addClass('p_error');
+                },
+                //验证成功后,将错误提示信息至空
+                success: function (labelError, element) {
+                    $(element).next('span').html('');
+                }
+            });
+
+            //给后去手机验证码的按钮添加点击事件,青青MemberController中的getSmsCode方法,并将要验证的手机号传入
+            $('.getSmsCode').click(function () {
+
+                //获取手机号
+                var tel = $('.tel').val();
+                //发送ajax请求
+                $.post('{:U("Member/getSmsCode")}', {tel: tel}, function (data) {
+                    //点击获取验证码之后,将按钮禁用.并显示60秒倒计时
+                    $('.getSmsCode').prop('disabled', true);
+                    var time = 6;
+                    var timer = setInterval(function () {
+                        time--;
+                        $('.getSmsCode').text(time + ' 秒后重新获取');
+                        if (time == 0) {
+                            clearInterval(timer);
+                            $('.getSmsCode').prop('disabled', false).text('获取手机验证码');
+
+                        }
+                    }, 1000);
+                });
+
+
+            });
+        })
+    </script>
+</block>

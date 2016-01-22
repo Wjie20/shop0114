@@ -20,6 +20,8 @@ class GoodsCategoryModel extends Model
      */
     public function getList()
     {
+//        S('GOODS_CATEGORY',null);
+//        exit;
         $rows = S('GOODS_CATEGORY');
         if (empty($rows)) {
             $rows = $this->field('id,name,parent_id,level')->where(array('status' => 1))->order('lft')->select();
@@ -32,6 +34,9 @@ class GoodsCategoryModel extends Model
     {
         $sql = "select parent.id,parent.name from goods_category as parent,goods_category as child where parent.lft <= child.lft and parent.rght >= child.rght and child.id = {$goods_category_id} order by parent.lft";
         $rows = $this->query($sql);
+//        echo $this->_sql();
+//        dump($rows);
+//        exit;
         return $rows;
 
     }

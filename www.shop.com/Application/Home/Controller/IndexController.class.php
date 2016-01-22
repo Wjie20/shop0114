@@ -65,16 +65,19 @@ class IndexController extends Controller
      * 商品详情页
      * @param $id
      */
-    public function goods($id)
+    public function goods($id = 1)
     {
 
         //根据当前商品的id,查询当前商品的数据用作goods.html页面的数据展示
         $goodsModel = D('Goods');
         $goods = $goodsModel->getGoodsById($id);
         $this->assign($goods);
+
         //根据当前商品的分类id查询出当前商品的所有父级分类,用作商品页的面包屑导航
         $goodsCategoryModel = D('GoodsCategory');
         $parents = $goodsCategoryModel->getParents($goods['goods_category_id']);
+//        echo $parents;
+//        exit;
         $this->assign('parents', $parents);
         $this->assign('is_hide', true);
         $this->assign('meta_title', '商品详情');
